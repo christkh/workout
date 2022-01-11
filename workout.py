@@ -3,7 +3,7 @@ import csv
 import datetime
 import pandas as pd
 
-with open(r'C:\Users\chris\OneDrive\Desktop\message_1.json') as json_file:
+with open('message_1.json') as json_file:
     data = json.load(json_file)
 
 workout_data = data['messages']
@@ -31,10 +31,10 @@ df = pd.read_csv('workout_data.csv')
 df['timestamp_ms'] = pd.to_datetime(df.timestamp_ms, unit='ms')
 
 # substring operation to pull in the first 8 characters
-df['content'] = df['content'].str.slice(0,8)
+df['photos'] = df['photos'].str.slice(0,8)
 
 # variable to stored filtered rows with matching substring
-pics = df[df['content'].str.contains("'uri':")]
+pics = df[df['photos'].str.contains("'uri':")]
 
 print(pics)
 
@@ -43,6 +43,5 @@ print(pics)
 
 """
 todo
-1) Use csv or panda dataframe libaries to filter for rows where 'URI' key exists
-2) Convert python timestamp to datetime
+1) Issue w/ column name between 'content' and 'photos' 
 """
