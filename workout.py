@@ -43,5 +43,6 @@ print(pics)
 
 """
 todo
-1) Issue w/ column name between 'content' and 'photos' 
+1)  load df into csv or googlesheet
+
 """
