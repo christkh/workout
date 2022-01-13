@@ -2,6 +2,7 @@ import json
 import csv
 import datetime
 import pandas as pd
+import df2gspread as d2g
 
 with open('message_1.json') as json_file:
     data = json.load(json_file)
