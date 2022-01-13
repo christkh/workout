@@ -2,7 +2,9 @@ import json
 import csv
 import datetime
 import pandas as pd
-import df2gspread as d2g
+from gspread_dataframe import get_as_dataframe, set_with_dataframe
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 
 with open('message_1.json') as json_file:
     data = json.load(json_file)
@@ -41,9 +43,22 @@ print(pics)
 
 #print(df[['sender_name','timestamp_ms', 'pics']])
 
+#load data to googlesheet
+
+gc = gspread.service_account(filename=r'C:\Users\chris\workout\jsonFileFromGoogle.json')
+
+sh = gc.open_by_key('1Utqjn3OIy-5UB3cZtK3DAyqVYkCFQ17VqUwrte1aqm0')
+
+worksheet = sh.worksheet("Log2")
+
+set_with_dataframe(worksheet, pics)
+#worksheet.update('B1', 'Bingo!')
+
 
 """
 todo
 1)  load df into csv or googlesheet
 
+spreadsheet key page url:
+1Utqjn3OIy-5UB3cZtK3DAyqVYkCFQ17VqUwrte1aqm0
 """
