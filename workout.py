@@ -1,3 +1,5 @@
+#TODO: Add a column for week, append out to either csv or googlesheet
+
 import json
 import csv
 import datetime
@@ -40,7 +42,7 @@ df = pd.read_csv('workout_data.csv')
 # converts the timestamp to datetime format
 df['timestamp_ms'] = pd.to_datetime(df.timestamp_ms, unit='ms')
 df['timestamp_ms'] = pd.to_datetime(df.timestamp_ms, format='%Y%m%d')
-
+df['ts_ptc'] = pd.Timestamp(df.timestamp_ms, tz='US/Pacific')
 # delete unnecessary columns
 df = df.drop(['photos', 'reactions', 'type', 'is_unsent'], axis=1)
 print(df)
@@ -53,4 +55,4 @@ print(df)
 
 #worksheet = sh.worksheet("Log2")
 
-#set_with_dataframe(worksheet, pics)
+#set_with_dataframe(worksheet, df)
