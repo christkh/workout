@@ -42,7 +42,11 @@ df = pd.read_csv('workout_data.csv')
 # converts the timestamp to datetime format
 df['timestamp_ms'] = pd.to_datetime(df.timestamp_ms, unit='ms')
 df['timestamp_ms'] = pd.to_datetime(df.timestamp_ms, format='%Y%m%d')
+<<<<<<< HEAD
 
+=======
+df['ts_ptc'] = pd.Timestamp(df.timestamp_ms, tz='US/Pacific')
+>>>>>>> v2
 # delete unnecessary columns
 df = df.drop(['photos', 'reactions', 'type', 'is_unsent'], axis=1)
 print(df)
