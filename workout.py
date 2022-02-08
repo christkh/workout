@@ -4,6 +4,7 @@ import json
 import csv
 import datetime
 import pandas as pd
+import arrow
 from gspread_dataframe import get_as_dataframe, set_with_dataframe
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
@@ -17,6 +18,10 @@ logdata = data["messages"]
 pics = []
 for workout in logdata:
     if 'photos' in workout.keys():
+        ts = workout.get('timestamp_ms')
+        dt = arrow.Arrow.fromtimestamp(ts)
+        workout['datetime'] = dt.to('US/Pacific').format('MM-DD-YYYY HH:mm:ss')
+        workout['w_date'] = dt.to('US/Pacific').format('MM-DD-YYYY')
         pics.append(workout)
 
 #writes to csv file
@@ -39,24 +44,16 @@ data_file.close()
 # converting csv file to panda dataframe
 df = pd.read_csv('workout_data.csv')
 
-# converts the timestamp to datetime format
-df['timestamp_ms'] = pd.to_datetime(df.timestamp_ms, unit='ms')
-df['timestamp_ms'] = pd.to_datetime(df.timestamp_ms, format='%Y%m%d')
-<<<<<<< HEAD
-
-=======
-df['ts_ptc'] = pd.Timestamp(df.timestamp_ms, tz='US/Pacific')
->>>>>>> v2
 # delete unnecessary columns
-df = df.drop(['photos', 'reactions', 'type', 'is_unsent'], axis=1)
+df = df.drop(['photos', 'reactions', 'type', 'is_unsent', 'timestamp_ms'], axis=1)
 print(df)
 
 
 #load data to googlesheet
-#gc = gspread.service_account(filename=r'C:\Users\chris\workout\jsonFileFromGoogle.json')
+gc = gspread.service_account(filename=r'C:\Users\chris\workout\jsonFileFromGoogle.json')
 
-#sh = gc.open_by_key('1Utqjn3OIy-5UB3cZtK3DAyqVYkCFQ17VqUwrte1aqm0')
+sh = gc.open_by_key('1Utqjn3OIy-5UB3cZtK3DAyqVYkCFQ17VqUwrte1aqm0')
 
-#worksheet = sh.worksheet("Log2")
+worksheet = sh.worksheet("Log2")
 
-#set_with_dataframe(worksheet, df)
+set_with_dataframe(worksheet, df)
