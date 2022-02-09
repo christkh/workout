@@ -24,6 +24,8 @@ for workout in logdata:
         workout['w_date'] = dt.to('US/Pacific').format('MM-DD-YYYY')
         pics.append(workout)
 
+print(pics)
+
 #writes to csv file
 data_file = open('workout_data.csv', 'w') 
 
@@ -42,12 +44,17 @@ for workout in pics:
 data_file.close()
 
 # converting csv file to panda dataframe
-df = pd.read_csv('workout_data.csv')
+df = pd.read_csv('workout_data.csv', parse_dates=['datetime','w_date'])
 
 # delete unnecessary columns
 df = df.drop(['photos', 'reactions', 'type', 'is_unsent', 'timestamp_ms'], axis=1)
-print(df)
 
+df['startdate'] = pd.to_datetime('11/08/2021')
+
+df['weeknumber'] =  (((df['w_date'] - df['startdate']).dt.days)/7)+1
+df['weeknumber'] =  df['weeknumber'].astype(int)
+
+print(df)
 
 #load data to googlesheet
 gc = gspread.service_account(filename=r'C:\Users\chris\workout\jsonFileFromGoogle.json')
