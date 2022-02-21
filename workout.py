@@ -1,5 +1,3 @@
-#TODO: Add a column for week, append out to either csv or googlesheet
-
 import json
 import csv
 import datetime
@@ -7,13 +5,13 @@ import pandas as pd
 import arrow
 from gspread_dataframe import get_as_dataframe, set_with_dataframe
 import gspread
+from pendulum import date
 
 with open('message_1.json') as json_file:
     data = json.load(json_file)
 
 logdata = data["messages"]
 
-#TODO: use list comprehension
 pics = []
 for workout in logdata:
     if 'photos' in workout.keys():
@@ -22,8 +20,6 @@ for workout in logdata:
         workout['datetime'] = dt.to('US/Pacific').format('MM-DD-YYYY HH:mm:ss')
         workout['w_date'] = dt.to('US/Pacific').format('MM-DD-YYYY')
         pics.append(workout)
-
-print(pics)
 
 #writes to csv file
 data_file = open('workout_data.csv', 'w') 
@@ -49,26 +45,32 @@ df = pd.read_csv('workout_data.csv', parse_dates=['datetime','w_date'])
 df = df.drop(['photos', 'reactions', 'type', 'is_unsent', 'timestamp_ms'], axis=1)
 
 #starting date of workout
-df['startdate'] = pd.to_datetime('02/14/2022')
+first_date = '02/14/2022'
+df['startdate'] = pd.to_datetime(first_date, format="%m/%d/%Y")
 
 df['weeknumber'] =  (((df['w_date'] - df['startdate']).dt.days)/7)+1
 df['weeknumber'] =  df['weeknumber'].astype(int)
+upl_date = datetime.datetime.now()
+df['upload_date'] = pd.to_datetime(upl_date)
+
+df=df.sort_values(by='datetime')
 
 print(df)
 
 #load data to googlesheet
 #gc = gspread.service_account(filename=r'C:\Users\chris\workout\jsonFileFromGoogle.json')
 
-gc = gspread.service_account(filename=r'jsonFileFromGoogle.json')
+#function to find next avail row for insertion
+def next_available_row(worksheet):
+    str_list = list(filter(None, worksheet.col_values(1)))
+    return str(len(str_list)+1)
 
+#credential var
+gc = gspread.service_account(filename=r'jsonFileFromGoogle.json')
 gkey = '1Utqjn3OIy-5UB3cZtK3DAyqVYkCFQ17VqUwrte1aqm0'
 sh = gc.open_by_key(gkey)
-
 worksheet = sh.worksheet("Log")
+next_row = next_available_row(worksheet)
 
-#i = 1
-
-#while worksheet.cell(i,1).value != "":
-#    i = i + 1
-
-set_with_dataframe(worksheet, df)
+i = int(next_row)
+set_with_dataframe(worksheet, df,i,1,False,False)
