@@ -7,7 +7,6 @@ import pandas as pd
 import arrow
 from gspread_dataframe import get_as_dataframe, set_with_dataframe
 import gspread
-from oauth2client.service_account import ServiceAccountCredentials
 
 with open('message_1.json') as json_file:
     data = json.load(json_file)
@@ -43,13 +42,14 @@ for workout in pics:
     csv_writer.writerow(workout.values())
 data_file.close()
 
-# converting csv file to panda dataframe
+#converting csv file to panda dataframe
 df = pd.read_csv('workout_data.csv', parse_dates=['datetime','w_date'])
 
-# delete unnecessary columns
+#delete unnecessary columns
 df = df.drop(['photos', 'reactions', 'type', 'is_unsent', 'timestamp_ms'], axis=1)
 
-df['startdate'] = pd.to_datetime('11/08/2021')
+#starting date of workout
+df['startdate'] = pd.to_datetime('02/14/2022')
 
 df['weeknumber'] =  (((df['w_date'] - df['startdate']).dt.days)/7)+1
 df['weeknumber'] =  df['weeknumber'].astype(int)
@@ -57,10 +57,18 @@ df['weeknumber'] =  df['weeknumber'].astype(int)
 print(df)
 
 #load data to googlesheet
-gc = gspread.service_account(filename=r'C:\Users\chris\workout\jsonFileFromGoogle.json')
+#gc = gspread.service_account(filename=r'C:\Users\chris\workout\jsonFileFromGoogle.json')
 
-sh = gc.open_by_key('1Utqjn3OIy-5UB3cZtK3DAyqVYkCFQ17VqUwrte1aqm0')
+gc = gspread.service_account(filename=r'jsonFileFromGoogle.json')
 
-worksheet = sh.worksheet("Log2")
+gkey = '1Utqjn3OIy-5UB3cZtK3DAyqVYkCFQ17VqUwrte1aqm0'
+sh = gc.open_by_key(gkey)
+
+worksheet = sh.worksheet("Log")
+
+#i = 1
+
+#while worksheet.cell(i,1).value != "":
+#    i = i + 1
 
 set_with_dataframe(worksheet, df)
