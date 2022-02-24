@@ -5,7 +5,6 @@ import pandas as pd
 import arrow
 from gspread_dataframe import get_as_dataframe, set_with_dataframe
 import gspread
-from pendulum import date
 
 with open('message_1.json') as json_file:
     data = json.load(json_file)

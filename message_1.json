@@ -1412,18 +1412,6 @@
     },
     {
       "sender_name": "Chris Huang",
-      "timestamp_ms": 1645470487157,
-      "photos": [
-        {
-          "uri": "messages/inbox/springworkoutchallenge__paxzsguyg/photos/274216817_1159293798214902_4729580981022545531_n_1159293788214903.png",
-          "creation_timestamp": 1645470485
-        }
-      ],
-      "type": "Generic",
-      "is_unsent": false
-    },
-    {
-      "sender_name": "Chris Huang",
       "timestamp_ms": 1645470484308,
       "content": "good job everyone except for  @Jeffrey Young!!!",
       "type": "Generic",
