@@ -1662,23 +1662,6 @@
       }
     },
     {
-      "sender_name": "Chris Huang",
-      "timestamp_ms": 1650409109016,
-      "photos": [
-        {
-          "uri": "messages/inbox/springworkoutchallenge__paxzsguyg/photos/278545803_357726903076706_242327257454466982_n_357726893076707.jpg",
-          "creation_timestamp": 1650409106
-        }
-      ],
-      "type": "Generic",
-      "is_unsent": false,
-      "is_taken_down": false,
-      "bumped_message_metadata": {
-        "bumped_message": "",
-        "is_bumped": false
-      }
-    },
-    {
       "sender_name": "Alan Wong",
       "timestamp_ms": 1650406080777,
       "photos": [
