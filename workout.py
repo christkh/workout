@@ -46,13 +46,18 @@ df = pd.read_csv('workout_data.csv', parse_dates=['datetime','w_date'])
 df = df.drop(['photos', 'reactions', 'timestamp_ms'], axis=1)
 
 #starting date of workout
-first_date = '02/14/2022'
+first_date = '11/13/2022'
 df['startdate'] = pd.to_datetime(first_date, format="%m/%d/%Y")
 
 df['weeknumber'] =  (((df['w_date'] - df['startdate']).dt.days)/7)+1
 df['weeknumber'] =  df['weeknumber'].astype(int)
 upl_date = datetime.datetime.now()
 df['upload_date'] = pd.to_datetime(upl_date)
+
+df.loc[df['weeknumber'] == 1, 'week_goal'] = 2
+df.loc[df['weeknumber'] > 1, 'week_goal'] = 3
+
+df['workout_count'] = 1
 
 df=df.sort_values(by='datetime')
 
@@ -74,4 +79,4 @@ worksheet = sh.worksheet("Log")
 next_row = next_available_row(worksheet)
 
 i = int(next_row)
-set_with_dataframe(worksheet, df,i,1,False,False)
+set_with_dataframe(worksheet, df,i,1,False,False,False)
