@@ -63,15 +63,14 @@ df=df.sort_values(by='datetime')
 
 print(df)
 
-#load data to googlesheet
-#gc = gspread.service_account(filename=r'C:\Users\chris\workout\jsonFileFromGoogle.json')
+# load data to googlesheet
 
-#function to find next avail row for insertion
+# function to find next empty row for insertion
 def next_available_row(worksheet):
     str_list = list(filter(None, worksheet.col_values(1)))
     return str(len(str_list)+1)
 
-#credential var
+# credential var
 gc = gspread.service_account(filename=r'jsonFileFromGoogle.json')
 gkey = '1Utqjn3OIy-5UB3cZtK3DAyqVYkCFQ17VqUwrte1aqm0'
 sh = gc.open_by_key(gkey)
