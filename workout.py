@@ -10,7 +10,7 @@ with open('message_1.json') as json_file:
     data = json.load(json_file)
 
 logdata = data["messages"]
-rem_list = ['type','is_unsent','is_taken_down','bumped_message_metadata']
+rem_list = ['type']
 
 pics = []
 for workout in logdata:
@@ -22,7 +22,7 @@ for workout in logdata:
         pics.append(workout)
         [workout.pop(key) for key in rem_list]
 
-#writes to csv file
+# writes to csv file
 data_file = open('workout_data.csv', 'w') 
 
 csv_writer = csv.writer(data_file) 
@@ -39,13 +39,13 @@ for workout in pics:
     csv_writer.writerow(workout.values())
 data_file.close()
 
-#converting csv file to panda dataframe
+# converting csv file to panda dataframe
 df = pd.read_csv('workout_data.csv', parse_dates=['datetime','w_date'])
 
-#delete unnecessary columns
+# delete unnecessary columns
 df = df.drop(['photos', 'reactions', 'timestamp_ms'], axis=1)
 
-#starting date of workout
+# starting date of workout
 first_date = '11/13/2022'
 df['startdate'] = pd.to_datetime(first_date, format="%m/%d/%Y")
 
