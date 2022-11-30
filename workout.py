@@ -17,8 +17,20 @@ for workout in logdata:
     if 'photos' in workout.keys():
         ts = workout.get('timestamp_ms')
         dt = arrow.Arrow.fromtimestamp(ts)
-        workout['datetime'] = dt.to('US/Pacific').format('MM-DD-YYYY HH:mm:ss')
-        workout['w_date'] = dt.to('US/Pacific').format('MM-DD-YYYY')
+        # Asumi's default timezone for Denver
+        if 'Angela Suguro' in workout.get('sender_name'):
+            workout['datetime'] = dt.to('US/Central').format('MM-DD-YYYY HH:mm:ss')
+            workout['w_date'] = dt.to('US/Central').format('MM-DD-YYYY')
+            workout['timestamp'] = dt.to('US/Central').format('HH:mm:ss')
+        # Tina's default timezone for NY
+        elif 'Tina Peng' in workout.get('sender_name'):
+            workout['datetime'] = dt.to('US/Eastern').format('MM-DD-YYYY HH:mm:ss')
+            workout['w_date'] = dt.to('US/Eastern').format('MM-DD-YYYY')
+            workout['timestamp'] = dt.to('US/Eastern').format('HH:mm:ss')
+        else:
+            workout['datetime'] = dt.to('US/Pacific').format('MM-DD-YYYY HH:mm:ss')
+            workout['w_date'] = dt.to('US/Pacific').format('MM-DD-YYYY')
+            workout['timestamp'] = dt.to('US/Pacific').format('HH:mm:ss')
         pics.append(workout)
         [workout.pop(key) for key in rem_list]
 
@@ -60,6 +72,12 @@ df.loc[df['weeknumber'] > 1, 'week_goal'] = 3
 df['workout_count'] = 1
 
 df=df.sort_values(by='datetime')
+
+# time-series bins
+df.loc[df['timestamp'].between('00:00:00','08:00:00'), 'time_type'] = 'early morning'
+df.loc[df['timestamp'].between('08:00:00','12:00:00'), 'time_type'] = 'late morning'
+df.loc[df['timestamp'].between('12:00:00','17:00:00'), 'time_type'] = 'afternoon'
+df.loc[df['timestamp'].between('17:00:00','11:59:59'), 'time_type'] = 'evening'
 
 print(df)
 
