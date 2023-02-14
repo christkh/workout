@@ -32,7 +32,7 @@ for workout in logdata:
             workout['w_date'] = dt.to('US/Pacific').format('MM-DD-YYYY')
             workout['timestamp'] = dt.to('US/Pacific').format('HH:mm:ss')
         pics.append(workout)
-        [workout.pop(key) for key in rem_list]
+        #[workout.pop(key) for key in rem_list]
 
 # writes to csv file
 data_file = open('workout_data.csv', 'w') 
@@ -58,7 +58,7 @@ df = pd.read_csv('workout_data.csv', parse_dates=['datetime','w_date'])
 df = df.drop(['photos', 'reactions', 'timestamp_ms'], axis=1)
 
 # starting date of workout
-first_date = '11/13/2022'
+first_date = '02/05/2023'
 df['startdate'] = pd.to_datetime(first_date, format="%m/%d/%Y")
 
 df['weeknumber'] =  (((df['w_date'] - df['startdate']).dt.days)/7)+1
@@ -92,7 +92,7 @@ def next_available_row(worksheet):
 gc = gspread.service_account(filename=r'jsonFileFromGoogle.json')
 gkey = '1Utqjn3OIy-5UB3cZtK3DAyqVYkCFQ17VqUwrte1aqm0'
 sh = gc.open_by_key(gkey)
-worksheet = sh.worksheet("Log")
+worksheet = sh.worksheet("summer23")
 next_row = next_available_row(worksheet)
 
 i = int(next_row)
